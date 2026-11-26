@@ -28,4 +28,35 @@ a.dl{display:block;text-align:center;background:#22c55e;color:#000;padding:12px;
 {% else %}<div class="issue" style="background:#14532d">✅ File is clean!</div>{% endif %}
 <a class="dl" href="/download">⬇ Download Report</a>
 {% endif %}
-</div></body></html>
+</div><script>
+const form = document.querySelector('form');
+let resultBox = document.getElementById('result');
+if (!resultBox) {
+  resultBox = document.createElement('div');
+  resultBox.id = 'result';
+  form.after(resultBox);
+}
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  resultBox.innerHTML = '<p>Checking... please wait...</p>';
+  const data = new FormData(form);
+  try {
+    const res = await fetch('/check', { method: 'POST', body: data });
+    const j = await res.json();
+    if (j.error) { resultBox.innerHTML = '<p style="color:red;">❌ ' + j.error + '</p>'; return; }
+    const pages = j.pages ?? j.pages_est ?? '-';
+    resultBox.innerHTML = `
+      <div style="margin-top:16px; padding:16px; border-radius:12px; background:#f0fdf4; border:1px solid #bbf7d0;">
+        <h3 style="margin:0 0 8px;">✅ Check Complete</h3>
+        <p><b>Type:</b> ${j.type}</p>
+        <p><b>Words:</b> ${j.words}</p>
+        <p><b>Characters:</b> ${j.chars}</p>
+        <p><b>Pages:</b> ${pages}</p>
+        ${j.words === 0 ? '<p style="color:#b45309;">⚠️ No selectable text found — this may be a scanned/image PDF.</p>' : ''}
+      </div>`;
+  } catch(err) {
+    resultBox.innerHTML = '<p style="color:red;">❌ Error checking file. Try again.</p>';
+  }
+});
+</script>
+</body></html>
