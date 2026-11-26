@@ -66,7 +66,8 @@ form.addEventListener('submit', async (e) => {
 
 // Download logic
 document.getElementById('downloadBtn').onclick = function() {
-  const text = "FILE CHECKER PRO - REPORT\n\nType: " + j.type + "\nWords: " + j.words + "\nCharacters: " + j.chars + "\nPages: " + pages + "\n\nChecked on: " + new Date().toLocaleString();
+ const fileName = document.querySelector('input[type="file"]').files[0] ? document.querySelector('input[type="file"]').files[0].name : 'Unknown';
+const text = "FILE CHECKER PRO - REPORT\n\nFile: " + fileName + "\nType: " + j.type + "\nWords: " + j.words + "\nCharacters: " + j.chars + "\nPages: " + pages + "\n\nChecked on: " + new Date().toLocaleString();
   const blob = new Blob([text], {type: 'text/plain'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
