@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>File Checker Pro - DOCX + PDF</title>
+<style>
+*{box-sizing:border-box}body{font-family:Segoe UI,Arial;background:#0f172a;color:#fff;margin:0;padding:20px}
+.card{max-width:620px;margin:30px auto;background:#1e293b;padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+h1{margin:0;font-size:26px} p.sub{color:#94a3b8}
+.drop{border:2px dashed #38bdf8;border-radius:12px;padding:28px;text-align:center;margin:20px 0;background:#0f172a}
+input[type=file]{color:#fff} button{background:#38bdf8;border:0;padding:14px 22px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;font-size:16px}
+button:hover{background:#0ea5e9} .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0}
+.box{background:#0f172a;padding:14px;border-radius:10px;text-align:center}.box b{font-size:22px;display:block}.box span{color:#94a3b8;font-size:13px}
+.ok{color:#22c55e}.bad{color:#f87171}.issue{background:#7f1d1d;padding:10px;border-radius:8px;margin:6px 0}
+a.dl{display:block;text-align:center;background:#22c55e;color:#000;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;margin-top:12px}
+.badge{background:#38bdf8;color:#000;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
+</style></head>
+<body><div class="card">
+<h1>📁 File Checker Pro</h1><p class="sub">DOCX + PDF Checker — corrupt, empty, clean?</p>
+<form method="post" enctype="multipart/form-data"><div class="drop">
+<input type="file" name="file" accept=".docx,.pdf" required><p>Supports .docx and .pdf</p></div>
+<button type="submit">Upload & Check →</button></form>
+{% if result %}
+<h2 class="{% if 'CLEAN' in result.status %}ok{% else %}bad{% endif %}">{{ result.status }} <span class="badge">{{ result.type }}</span></h2>
+<p><b>{{ result.filename }}</b> — {{ result.size }} bytes</p>
+<div class="grid"><div class="box"><b>{{ result.words }}</b><span>Words</span></div>
+<div class="box"><b>{{ result.pages if result.type=='PDF' else result.paragraphs }}</b><span>{{ 'Pages' if result.type=='PDF' else 'Paragraphs' }}</span></div>
+<div class="box"><b>{{ result.tables if result.type=='DOCX' else result.pages }}</b><span>{{ 'Tables' if result.type=='DOCX' else 'Pages' }}</span></div></div>
+{% if result.issues %}{% for i in result.issues %}<div class="issue">⚠️ {{ i }}</div>{% endfor %}
+{% else %}<div class="issue" style="background:#14532d">✅ File is clean!</div>{% endif %}
+<a class="dl" href="/download">⬇ Download Report</a>
+{% endif %}
+</div></body></html>
