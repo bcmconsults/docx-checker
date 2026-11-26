@@ -53,7 +53,26 @@ form.addEventListener('submit', async (e) => {
   <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Characters:</b> ${j.chars}</p>
   <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Pages:</b> ${pages}</p>
   ${j.words === 0 ? '<p style="margin-top:14px; padding:12px; background:#fdecea; border:2px solid #d93025; color:#b3261e; font-weight:800; font-size:16px; border-radius:8px;">⚠️ This file has 0 words — it may be scanned / image-only.</p>' : ''}
+</div>`;resultBox.innerHTML = `
+<div style="margin-top:20px; padding:20px; border-radius:14px; background:#ffffff; border:3px solid #1a73e8; box-shadow:0 4px 20px rgba(0,0,0,0.20); color:#000000;">
+  <h3 style="margin:0 0 14px 0; color:#0b57d0; font-size:22px; font-weight:900;">✅ Check Complete</h3>
+  <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Type:</b> ${j.type}</p>
+  <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Words:</b> ${j.words}</p>
+  <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Characters:</b> ${j.chars}</p>
+  <p style="margin:8px 0; font-size:18px; font-weight:700; color:#000000;"><b>Pages:</b> ${pages}</p>
+  ${j.words === 0 ? '<p style="margin-top:14px; padding:12px; background:#fdecea; border:2px solid #d93025; color:#b3261e; font-weight:800; font-size:16px; border-radius:8px;">⚠️ This file has 0 words — it may be scanned / image-only.</p>' : ''}
+  <button id="downloadBtn" style="margin-top:16px; width:100%; padding:14px; background:#1a73e8; color:#fff; border:none; border-radius:10px; font-size:17px; font-weight:800; cursor:pointer;">⬇️ Download Report</button>
 </div>`;
+
+// Download logic
+document.getElementById('downloadBtn').onclick = function() {
+  const text = "FILE CHECKER PRO - REPORT\n\nType: " + j.type + "\nWords: " + j.words + "\nCharacters: " + j.chars + "\nPages: " + pages + "\n\nChecked on: " + new Date().toLocaleString();
+  const blob = new Blob([text], {type: 'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'file-check-report.txt';
+  a.click();
+};
   } catch(err) {
     resultBox.innerHTML = '<p style="color:red;">❌ Error checking file. Try again.</p>';
   }
