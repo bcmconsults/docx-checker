@@ -15,7 +15,7 @@ a.dl{display:block;text-align:center;background:#22c55e;color:#000;padding:12px;
 </style></head>
 <body><div class="card">
 <h1>📁 File Checker Pro</h1><p class="sub">DOCX + PDF Checker — corrupt, empty, clean?</p>
-<form method="post" enctype="multipart/form-data"><div class="drop">
+<form method="post" action="/check" enctype="multipart/form-data">
 <input type="file" name="file" accept=".docx,.pdf" required><p>Supports .docx and .pdf</p></div>
 <button type="submit">Upload & Check →</button></form>
 {% if result %}
